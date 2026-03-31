@@ -36,8 +36,8 @@ stripe = ["async-stripe"]
 # Tauri integration
 tauri = ["dep:tauri"]
 
-# Auth backed by sst-sdk
-auth = ["dep:sst-sdk"]
+# Auth backed by sst-sdk (requires ../sst/sst-sdk checkout)
+# auth = ["dep:sst-sdk"]
 
 # Meta features
 full = ["postgres", "s3", "email", "stripe"]
@@ -93,8 +93,8 @@ async-stripe = { version = "0.39", optional = true }
 # Optional: Tauri integration
 tauri = { version = "2", default-features = false, optional = true }
 
-# Optional: Auth (backed by sst-sdk)
-sst-sdk = { path = "../sst/sst-sdk", optional = true }
+# Optional: Auth (backed by sst-sdk) — uncomment when ../sst/sst-sdk is available
+# sst-sdk = { path = "../sst/sst-sdk", optional = true }
 
 [dev-dependencies]
 tokio = { version = "1.0", features = ["rt-multi-thread", "macros"] }
