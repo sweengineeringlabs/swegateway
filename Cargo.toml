@@ -1,0 +1,102 @@
+[package]
+name = "swe-gateway"
+version = "0.6.0"
+edition = "2021"
+rust-version = "1.75"
+license = "MIT"
+authors = ["SWE Compliance Team"]
+description = "Gateway abstraction layer with inbound + outbound support for database, file, HTTP, notification, and payment gateways"
+repository = "https://github.com/swe-compliance/swe-gateway"
+keywords = ["gateway", "abstraction", "hexagonal", "ports-adapters"]
+categories = ["development-tools", "web-programming"]
+
+[package.metadata.struct-engine]
+application_type = "full"
+
+[features]
+default = []
+
+# Database backends
+postgres = ["sqlx/postgres", "sqlx/runtime-tokio"]
+mysql = ["sqlx/mysql", "sqlx/runtime-tokio"]
+sqlite = ["sqlx/sqlite", "sqlx/runtime-tokio"]
+
+# File storage backends
+s3 = ["aws-sdk-s3", "aws-config"]
+
+# HTTP backends
+graphql = ["graphql_client"]
+
+# Notification backends
+email = ["lettre"]
+
+# Payment backends
+stripe = ["async-stripe"]
+
+# Tauri integration
+tauri = ["dep:tauri"]
+
+# Auth backed by sst-sdk
+auth = ["dep:sst-sdk"]
+
+# Meta features
+full = ["postgres", "s3", "email", "stripe"]
+
+[dependencies]
+# Core
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.8"
+thiserror = "1.0"
+async-trait = "0.1"
+futures = "0.3"
+
+# Async runtime
+tokio = { version = "1.0", features = ["rt", "sync", "fs", "io-util"] }
+
+# Sync primitives
+parking_lot = "0.12"
+
+# HTTP client utilities
+base64 = "0.22"
+
+# File system
+walkdir = "2"
+
+# Utilities
+uuid = { version = "1.0", features = ["v4"] }
+chrono = { version = "0.4", features = ["serde"] }
+tracing = "0.1"
+mdc-logging = { version = "0.1.0", registry = "local" }
+swe-observ-processes = { version = "0.2.0", registry = "local" }
+mime_guess = "2"
+
+# Optional: HTTP client
+reqwest = { version = "0.12", features = ["json"], default-features = false, optional = true }
+
+# Optional: Database
+sqlx = { version = "0.8", optional = true, default-features = false }
+
+# Optional: S3
+aws-sdk-s3 = { version = "1", optional = true }
+aws-config = { version = "1", optional = true }
+
+# Optional: GraphQL
+graphql_client = { version = "0.14", optional = true }
+
+# Optional: Email
+lettre = { version = "0.11", optional = true, default-features = false, features = ["builder", "smtp-transport", "tokio1-rustls-tls"] }
+
+# Optional: Stripe
+async-stripe = { version = "0.39", optional = true }
+
+# Optional: Tauri integration
+tauri = { version = "2", default-features = false, optional = true }
+
+# Optional: Auth (backed by sst-sdk)
+sst-sdk = { path = "../sst/sst-sdk", optional = true }
+
+[dev-dependencies]
+tokio = { version = "1.0", features = ["rt-multi-thread", "macros"] }
+tempfile = "3"
+reqwest = { version = "0.12", features = ["json"], default-features = false }
