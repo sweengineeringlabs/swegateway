@@ -70,8 +70,13 @@ walkdir = "2"
 uuid = { version = "1.0", features = ["v4"] }
 chrono = { version = "0.4", features = ["serde"] }
 tracing = "0.1"
-mdc-logging = { version = "0.1.0", registry = "local" }
-swe-observ-processes = { version = "0.2.0", registry = "local" }
+# Sibling path-deps (via ../justobserv). The local `registry = "local"`
+# pattern used previously doesn't translate to CI runners — path-deps
+# match the same pattern used by downstream consumers (vmisolate,
+# llmboot). The alias preserves the `mdc_logging::` / `swe_observ_processes::`
+# import paths already in use below.
+mdc-logging         = { path = "../justobserv/main/backend/features/context",   package = "swe_justobserv_context" }
+swe-observ-processes = { path = "../justobserv/main/backend/features/processes", package = "swe_justobserv_processes" }
 mime_guess = "2"
 
 # Optional: HTTP client
